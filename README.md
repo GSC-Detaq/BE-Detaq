@@ -4,11 +4,9 @@ This repository was developed using Ktor and colaborated with Supabase and Fireb
 
 ## How to Run
 
-If you want to try and modify this repository on your own, you have to do few steps.
-
-Prepare a file named **properties.conf** and put it in **sources** folder on your project.
-
-Type this code, and change all credentials with yours.
+1.  If you want to try and modify this repository on your own, you have to do few steps.
+2.  Prepare a file named **properties.conf** and put it in **sources** folder on your project.
+3.  Type this code, and change all credentials with yours.
 
 ```plaintext
 ktor{
