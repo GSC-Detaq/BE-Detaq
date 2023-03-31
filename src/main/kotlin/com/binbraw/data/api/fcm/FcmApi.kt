@@ -106,7 +106,7 @@ object FcmApi: KoinComponent {
                         notification = SendPushNotificationRequestAsClientData(
                             body = "Something happens to $patientName, please check or click this notification to be redirected to Google Maps",
                             title = "SOS Notification from your family",
-                            maps_link = formatLink
+                            link = formatLink
                         )
                     ))
                     contentType(ContentType.Application.Json)

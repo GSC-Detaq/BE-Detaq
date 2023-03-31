@@ -12,5 +12,5 @@ data class SendPushNotificationRequestAsClient(
 data class SendPushNotificationRequestAsClientData(
     val body:String,
     val title:String,
-    val maps_link:String
+    val link:String
 )

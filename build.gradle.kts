@@ -70,4 +70,7 @@ dependencies {
 
     //Client
     implementation("io.ktor:ktor-client-cio:$ktor_version")
+
+    //Quartz
+    implementation("org.quartz-scheduler:quartz:2.3.2")
 }
