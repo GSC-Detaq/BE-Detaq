@@ -32,3 +32,6 @@ ktor{
 ```
 
 **Dont forget to change the branch to "staging" first before run this repository**
+
+## Documentation
+Link: https://documenter.getpostman.com/view/25211967/2s93JqSkYU#3ef6706d-6f51-4329-87ba-33bf749a585f
