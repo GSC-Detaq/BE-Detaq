@@ -5,6 +5,8 @@ import com.binbraw.data.table.notification.NotificationTypeTable
 import com.binbraw.model.base.MetaResponse
 import com.binbraw.model.request.notification.AddNewReminderRequest
 import com.binbraw.model.request.notification.AddNewSosRequest
+import com.binbraw.model.response.notification.GetActiveNotificationCountResponse
+import com.binbraw.model.response.notification.GetActiveNotificationDataResponse
 import com.binbraw.model.response.notification.GetAllNotificationResponse
 import com.binbraw.model.response.notification.SingleNotificationResponse
 import com.binbraw.wrapper.sendGeneralResponse
@@ -145,6 +147,54 @@ object NotificationApi : KoinComponent {
                     ),
                     page = page,
                     data = datas
+                )
+            )
+        }
+    }
+
+    fun Route.setClickedStatusToTwo(path:String){
+        get(path){
+            val uid = call.principal<JWTPrincipal>()!!.payload.getClaim("uid").asString()
+            val notifId = call.parameters["notification_id"] ?: ""
+
+            transaction {
+                notifTable.update(
+                    {
+                        notifTable.notification_id eq UUID.fromString(notifId) and (notifTable.uid eq uid)
+                    }
+                ) {
+                    it[notifTable.clicked] = 1
+                }
+            }.let {
+                sendGeneralResponse<Any>(
+                    success = true,
+                    message = "Click status for $notifId changed",
+                    code = HttpStatusCode.OK
+                )
+            }
+        }
+    }
+
+    fun Route.getActiveNotificationCount(path:String){
+        get(path){
+            val uid = call.principal<JWTPrincipal>()!!.payload.getClaim("uid").asString()
+
+            val count = transaction {
+                notifTable.select {
+                    notifTable.uid eq uid and (notifTable.clicked eq 0)
+                }.count()
+            }
+
+            call.respond(
+                HttpStatusCode.OK,
+                GetActiveNotificationCountResponse(
+                    meta = MetaResponse(
+                        success = true,
+                        message = "Get active notification success"
+                    ),
+                    data = GetActiveNotificationDataResponse(
+                        active_notif_count = count
+                    )
                 )
             )
         }
