@@ -2,11 +2,15 @@ package com.binbraw.data.api.family
 
 import com.binbraw.data.table.family.PatientWithFamilyTable
 import com.binbraw.data.table.user.UserTable
+import com.binbraw.model.base.MetaResponse
+import com.binbraw.model.response.family.GetAllFamilyResponse
+import com.binbraw.model.response.family.GetAllFamilyResponseData
 import com.binbraw.wrapper.sendGeneralResponse
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -106,6 +110,31 @@ object PatientWithFamilyApi : KoinComponent {
                     it[patientWithFamilyTable.family_id]
                 }
             }
+
+            val datas = transaction {
+                familyIds.map { id ->
+                    userTable.select {
+                        userTable.uid eq UUID.fromString(id)
+                    }.firstNotNullOf {
+                        GetAllFamilyResponseData(
+                            uid = it[userTable.uid].toString(),
+                            name = it[userTable.name],
+                            email = it[userTable.email]
+                        )
+                    }
+                }
+            }
+
+            call.respond(
+                HttpStatusCode.OK,
+                GetAllFamilyResponse(
+                    meta = MetaResponse(
+                        success = true,
+                        message = "Get all family success"
+                    ),
+                    data = datas
+                )
+            )
         }
     }
 }

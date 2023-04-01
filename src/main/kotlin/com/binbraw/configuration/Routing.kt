@@ -4,6 +4,7 @@ import com.binbraw.data.api.emergency_contact.EmContactApi.addNewEmergencyContac
 import com.binbraw.data.api.emergency_contact.EmContactApi.getAllEmergencyContact
 import com.binbraw.data.api.emergency_contact.EmContactApi.getEmergencyContactByContactId
 import com.binbraw.data.api.family.PatientWithFamilyApi.addNewFamily
+import com.binbraw.data.api.family.PatientWithFamilyApi.getAllFamily
 import com.binbraw.data.api.fcm.FcmApi.sendFamiliesPushNotification
 import com.binbraw.data.api.fcm.FcmApi.sendPushNotificationNoBody
 import com.binbraw.data.api.fcm.FcmApi.updateFcmToken
@@ -62,6 +63,7 @@ fun Application.configureAuthorizedRouting(){
             getAllDoctorReminder("/doc_reminder/all")
             endStatusDoctorReminder("/doc_reminder/end")
             addNewFamily("/family/add")
+            getAllFamily("/family/getall")
             updateFcmToken("/fcm/update")
             sendFamiliesPushNotification("/fcm/sendnotif/families")
             androidPairWithIot("/iot/androidpair")
