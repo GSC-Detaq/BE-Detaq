@@ -16,6 +16,7 @@ import com.binbraw.data.api.iot.IotApi.getIotUidByCode
 import com.binbraw.data.api.notification.NotificationApi.addNewDoctorReminderNotification
 import com.binbraw.data.api.notification.NotificationApi.addNewMedicineReminderNotification
 import com.binbraw.data.api.notification.NotificationApi.addSosNotification
+import com.binbraw.data.api.notification.NotificationApi.getAllNotification
 import com.binbraw.data.api.reminder.DoctorReminderApi.addNewDoctorReminder
 import com.binbraw.data.api.reminder.DoctorReminderApi.endStatusDoctorReminder
 import com.binbraw.data.api.reminder.DoctorReminderApi.getAllDoctorReminder
@@ -67,6 +68,7 @@ fun Application.configureAuthorizedRouting(){
             addNewMedicineReminderNotification("/notif/add/reminder/medicine")
             addNewDoctorReminderNotification("/notif/add/reminder/doctor")
             addSosNotification("/notif/add/sos")
+            getAllNotification("/notif/getall")
         }
     }
 }
