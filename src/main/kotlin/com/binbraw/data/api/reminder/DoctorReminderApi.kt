@@ -14,9 +14,12 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.*
@@ -63,7 +66,7 @@ object DoctorReminderApi:KoinComponent {
                     ),
                     data = transaction {
                         docReminderTable.select{
-                            docReminderTable.uid eq uid
+                            docReminderTable.uid eq uid and(docReminderTable.status_code eq 1)
                         }.mapNotNull {
                             SingleDoctorReminderDataResponse(
                                 reminder_id = it[docReminderTable.reminder_id].toString(),
@@ -76,6 +79,27 @@ object DoctorReminderApi:KoinComponent {
                     }
                 )
             )
+        }
+    }
+
+    fun Route.endStatusDoctorReminder(path:String){
+        get(path){
+            val uid = call.principal<JWTPrincipal>()!!.payload.getClaim("uid").asString()
+            val reminder_id = call.parameters["reminder_id"] ?: ""
+
+            transaction {
+                docReminderTable.update({
+                    docReminderTable.reminder_id eq UUID.fromString(reminder_id) and(docReminderTable.uid eq uid)
+                }) {
+                    it[docReminderTable.status_code] = 2
+                }
+            }.let {
+                sendGeneralResponse<Any>(
+                    success = true,
+                    message = "Status changed",
+                    code = HttpStatusCode.OK
+                )
+            }
         }
     }
 }

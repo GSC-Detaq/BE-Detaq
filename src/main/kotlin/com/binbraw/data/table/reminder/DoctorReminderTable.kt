@@ -9,4 +9,5 @@ object DoctorReminderTable:Table("doctor_reminder") {
     val date = varchar("date", 128)
     val time = varchar("time", 128)
     val uid = varchar("uid", 128)
+    val status_code = integer("status_code")
 }

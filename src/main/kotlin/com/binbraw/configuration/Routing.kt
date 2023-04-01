@@ -4,7 +4,7 @@ import com.binbraw.data.api.emergency_contact.EmContactApi.addNewEmergencyContac
 import com.binbraw.data.api.emergency_contact.EmContactApi.getAllEmergencyContact
 import com.binbraw.data.api.emergency_contact.EmContactApi.getEmergencyContactByContactId
 import com.binbraw.data.api.family.PatientWithFamilyApi.addNewFamily
-import com.binbraw.data.api.fcm.FcmApi.sendPushNotification
+import com.binbraw.data.api.fcm.FcmApi.sendFamiliesPushNotification
 import com.binbraw.data.api.fcm.FcmApi.sendPushNotificationNoBody
 import com.binbraw.data.api.fcm.FcmApi.updateFcmToken
 import com.binbraw.data.api.general.role.RoleApi.getAllRole
@@ -14,8 +14,10 @@ import com.binbraw.data.api.iot.IotApi.addIotPairRequest
 import com.binbraw.data.api.iot.IotApi.androidPairWithIot
 import com.binbraw.data.api.iot.IotApi.getIotUidByCode
 import com.binbraw.data.api.reminder.DoctorReminderApi.addNewDoctorReminder
+import com.binbraw.data.api.reminder.DoctorReminderApi.endStatusDoctorReminder
 import com.binbraw.data.api.reminder.DoctorReminderApi.getAllDoctorReminder
 import com.binbraw.data.api.reminder.MedicineReminderApi.addNewMedicineReminder
+import com.binbraw.data.api.reminder.MedicineReminderApi.endStatusMedicineReminder
 import com.binbraw.data.api.reminder.MedicineReminderApi.getAllMedicineReminder
 import com.binbraw.data.api.user.UserApi.getMyOwnUserInfo
 import com.binbraw.data.api.user.UserApi.login
@@ -51,11 +53,13 @@ fun Application.configureAuthorizedRouting(){
             getAllEmergencyContact("/emcontact/allemcontact")
             addNewMedicineReminder("/med_reminder/add")
             getAllMedicineReminder("/med_reminder/all")
+            endStatusMedicineReminder("/med_reminder/end")
             addNewDoctorReminder("/doc_reminder/add")
             getAllDoctorReminder("/doc_reminder/all")
+            endStatusDoctorReminder("/doc_reminder/end")
             addNewFamily("/family/add")
             updateFcmToken("/fcm/update")
-            sendPushNotification("/fcm/sendnotif")
+            sendFamiliesPushNotification("/fcm/sendnotif/families")
             androidPairWithIot("/iot/androidpair")
         }
     }

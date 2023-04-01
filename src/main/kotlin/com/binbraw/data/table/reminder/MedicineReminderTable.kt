@@ -11,4 +11,5 @@ object MedicineReminderTable: Table("medicine_reminder") {
     val date_end = varchar("date_end", 128)
     val time = varchar("time", 128)
     val instruction = varchar("instruction", 128)
+    val status_code = integer("status_code")
 }

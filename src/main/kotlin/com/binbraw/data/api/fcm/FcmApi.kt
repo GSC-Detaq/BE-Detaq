@@ -54,7 +54,7 @@ object FcmApi : KoinComponent {
         }
     }
 
-    fun Route.sendPushNotification(path: String) {
+    fun Route.sendFamiliesPushNotification(path: String) {
         post(path) {
             val receivedBody = call.receive<SendPushNotificationRequest>()
 

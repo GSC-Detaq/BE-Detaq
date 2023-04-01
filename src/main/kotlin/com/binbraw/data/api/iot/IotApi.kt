@@ -103,7 +103,9 @@ object IotApi : KoinComponent {
             }
 
             transaction {
-                iotConnectTable.update {
+                iotConnectTable.update({
+                    iotConnectTable.code eq code
+                }) {
                     it[iotConnectTable.status_code] = 2
                     it[iotConnectTable.uid] = uid
                 }
