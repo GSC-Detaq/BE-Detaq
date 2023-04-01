@@ -95,4 +95,6 @@ object NotificationApi:KoinComponent {
             }
         }
     }
+//
+//    fun Route.getAllNotification
 }
