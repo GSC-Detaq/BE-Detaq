@@ -13,6 +13,9 @@ import com.binbraw.data.api.general.role.RoleApi.newRole
 import com.binbraw.data.api.iot.IotApi.addIotPairRequest
 import com.binbraw.data.api.iot.IotApi.androidPairWithIot
 import com.binbraw.data.api.iot.IotApi.getIotUidByCode
+import com.binbraw.data.api.notification.NotificationApi.addNewDoctorReminderNotification
+import com.binbraw.data.api.notification.NotificationApi.addNewMedicineReminderNotification
+import com.binbraw.data.api.notification.NotificationApi.addSosNotification
 import com.binbraw.data.api.reminder.DoctorReminderApi.addNewDoctorReminder
 import com.binbraw.data.api.reminder.DoctorReminderApi.endStatusDoctorReminder
 import com.binbraw.data.api.reminder.DoctorReminderApi.getAllDoctorReminder
@@ -61,6 +64,9 @@ fun Application.configureAuthorizedRouting(){
             updateFcmToken("/fcm/update")
             sendFamiliesPushNotification("/fcm/sendnotif/families")
             androidPairWithIot("/iot/androidpair")
+            addNewMedicineReminderNotification("/notif/add/reminder/medicine")
+            addNewDoctorReminderNotification("/notif/add/reminder/doctor")
+            addSosNotification("/notif/add/sos")
         }
     }
 }
