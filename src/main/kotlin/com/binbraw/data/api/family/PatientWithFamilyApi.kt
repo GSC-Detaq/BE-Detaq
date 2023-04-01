@@ -95,4 +95,17 @@ object PatientWithFamilyApi : KoinComponent {
             }
         }
     }
+
+    fun Route.getAllFamily(path:String){
+        get(path){
+            val uid = call.principal<JWTPrincipal>()!!.payload.getClaim("uid").asString()
+            val familyIds = transaction {
+                patientWithFamilyTable.select {
+                    patientWithFamilyTable.patient_id eq UUID.fromString(uid)
+                }.mapNotNull {
+                    it[patientWithFamilyTable.family_id]
+                }
+            }
+        }
+    }
 }

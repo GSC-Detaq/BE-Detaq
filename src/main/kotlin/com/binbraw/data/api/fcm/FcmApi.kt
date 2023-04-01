@@ -3,7 +3,6 @@ package com.binbraw.data.api.fcm
 import com.binbraw.data.table.family.PatientWithFamilyTable
 import com.binbraw.data.table.fcm.FcmTokenTable
 import com.binbraw.data.table.user.UserTable
-import com.binbraw.model.request.emergency_contact.SendWhatsappRequest
 import com.binbraw.model.request.fcm.SendPushNotificationRequest
 import com.binbraw.model.request.fcm.SendPushNotificationRequestAsClient
 import com.binbraw.model.request.fcm.SendPushNotificationRequestAsClientData
@@ -28,14 +27,14 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.UUID
 
-object FcmApi: KoinComponent {
+object FcmApi : KoinComponent {
     val fcmTokenTable by inject<FcmTokenTable>()
     val patientWithFamilyTable by inject<PatientWithFamilyTable>()
     val userTable by inject<UserTable>()
     val config by inject<Config>()
 
-    fun Route.updateFcmToken(path:String){
-        post(path){
+    fun Route.updateFcmToken(path: String) {
+        post(path) {
             val uid = call.principal<JWTPrincipal>()!!.payload.getClaim("uid").asString()
             val body = call.receive<UpdateFcmTokenRequest>()
 
@@ -55,10 +54,17 @@ object FcmApi: KoinComponent {
         }
     }
 
-    fun Route.sendPushNotification(path:String){
-        post(path){
+    fun Route.sendPushNotification(path: String) {
+        post(path) {
             val receivedBody = call.receive<SendPushNotificationRequest>()
-            val uid = call.principal<JWTPrincipal>()!!.payload.getClaim("uid").asString()
+
+            val uid = call.parameters["uid"]
+                ?: call
+                    .principal<JWTPrincipal>()!!
+                    .payload
+                    .getClaim("uid")
+                    .asString()
+
             val client = HttpClient(CIO) {
                 install(ContentNegotiation) {
                     gson()
@@ -82,12 +88,12 @@ object FcmApi: KoinComponent {
                         it[userTable.name]
                     }
                 }[0]
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 "Unknown"
             }
 
             familyIds.forEach { family_id ->
-                val token = try{
+                val token = try {
                     transaction {
                         fcmTokenTable.select {
                             fcmTokenTable.uid eq UUID.fromString(family_id)
@@ -95,20 +101,89 @@ object FcmApi: KoinComponent {
                             it[fcmTokenTable.token]
                         }
                     }[0]
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     ""
                 }
 
-                client.post("https://fcm.googleapis.com/fcm/send"){
+                client.post("https://fcm.googleapis.com/fcm/send") {
                     header("Authorization", "key=${config.fcm_access_key}")
-                    setBody(SendPushNotificationRequestAsClient(
-                        to = token,
-                        notification = SendPushNotificationRequestAsClientData(
-                            body = "Something happens to $patientName, please check or click this notification to be redirected to Google Maps",
-                            title = "SOS Notification from your family",
-                            link = formatLink
+                    setBody(
+                        SendPushNotificationRequestAsClient(
+                            to = token,
+                            notification = SendPushNotificationRequestAsClientData(
+                                body = "Something happens to $patientName, please check or click this notification to be redirected to Google Maps",
+                                title = "SOS Notification from your family",
+                                link = formatLink
+                            )
                         )
-                    ))
+                    )
+                    contentType(ContentType.Application.Json)
+                }
+            }
+
+            sendGeneralResponse<Any>(
+                success = true,
+                message = "Send notification succeeded",
+                code = HttpStatusCode.OK
+            )
+        }
+    }
+
+    fun Route.sendPushNotificationNoBody(path: String) {
+        post(path) {
+            val uid = call.parameters["uid"] ?: ""
+
+            val client = HttpClient(CIO) {
+                install(ContentNegotiation) {
+                    gson()
+                }
+            }
+
+            val familyIds = transaction {
+                patientWithFamilyTable.select {
+                    patientWithFamilyTable.patient_id eq UUID.fromString(uid)
+                }.mapNotNull {
+                    it[patientWithFamilyTable.family_id]
+                }
+            }
+
+            val patientName = try {
+                transaction {
+                    userTable.select {
+                        userTable.uid eq UUID.fromString(uid)
+                    }.mapNotNull {
+                        it[userTable.name]
+                    }
+                }[0]
+            } catch (e: Exception) {
+                "Unknown"
+            }
+
+            familyIds.forEach { family_id ->
+                val token = try {
+                    transaction {
+                        fcmTokenTable.select {
+                            fcmTokenTable.uid eq UUID.fromString(family_id)
+                        }.mapNotNull {
+                            it[fcmTokenTable.token]
+                        }
+                    }[0]
+                } catch (e: Exception) {
+                    ""
+                }
+
+                client.post("https://fcm.googleapis.com/fcm/send") {
+                    header("Authorization", "key=${config.fcm_access_key}")
+                    setBody(
+                        SendPushNotificationRequestAsClient(
+                            to = token,
+                            notification = SendPushNotificationRequestAsClientData(
+                                body = "Something happens to $patientName, please check or click this notification to be redirected to Google Maps",
+                                title = "SOS Notification from your family",
+                                link = ""
+                            )
+                        )
+                    )
                     contentType(ContentType.Application.Json)
                 }
             }

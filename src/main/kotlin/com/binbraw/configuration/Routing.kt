@@ -5,10 +5,14 @@ import com.binbraw.data.api.emergency_contact.EmContactApi.getAllEmergencyContac
 import com.binbraw.data.api.emergency_contact.EmContactApi.getEmergencyContactByContactId
 import com.binbraw.data.api.family.PatientWithFamilyApi.addNewFamily
 import com.binbraw.data.api.fcm.FcmApi.sendPushNotification
+import com.binbraw.data.api.fcm.FcmApi.sendPushNotificationNoBody
 import com.binbraw.data.api.fcm.FcmApi.updateFcmToken
 import com.binbraw.data.api.general.role.RoleApi.getAllRole
 import com.binbraw.data.api.general.role.RoleApi.getRoleById
 import com.binbraw.data.api.general.role.RoleApi.newRole
+import com.binbraw.data.api.iot.IotApi.addIotPairRequest
+import com.binbraw.data.api.iot.IotApi.androidPairWithIot
+import com.binbraw.data.api.iot.IotApi.getIotUidByCode
 import com.binbraw.data.api.reminder.DoctorReminderApi.addNewDoctorReminder
 import com.binbraw.data.api.reminder.DoctorReminderApi.getAllDoctorReminder
 import com.binbraw.data.api.reminder.MedicineReminderApi.addNewMedicineReminder
@@ -32,6 +36,9 @@ fun Application.configureRegularRouting() {
         newRole("/role/new")
         getAllRole("/role/all")
         getRoleById("/role/getbyid")
+        addIotPairRequest("/iot/request")
+        getIotUidByCode("/iot/getuid")
+        sendPushNotificationNoBody("/fcm/sendnotif_no_body")
     }
 }
 
@@ -49,6 +56,7 @@ fun Application.configureAuthorizedRouting(){
             addNewFamily("/family/add")
             updateFcmToken("/fcm/update")
             sendPushNotification("/fcm/sendnotif")
+            androidPairWithIot("/iot/androidpair")
         }
     }
 }

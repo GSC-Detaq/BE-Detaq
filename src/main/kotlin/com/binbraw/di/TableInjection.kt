@@ -5,6 +5,7 @@ import com.binbraw.data.table.emergency_contact.EmContactWithPatientTable
 import com.binbraw.data.table.family.PatientWithFamilyTable
 import com.binbraw.data.table.fcm.FcmTokenTable
 import com.binbraw.data.table.general.role.RoleTable
+import com.binbraw.data.table.iot.IotConnectTable
 import com.binbraw.data.table.reminder.DoctorReminderTable
 import com.binbraw.data.table.reminder.MedicineReminderTable
 import com.binbraw.data.table.user.UserTable
@@ -20,5 +21,6 @@ object TableInjection {
         single { DoctorReminderTable }
         single { PatientWithFamilyTable }
         single { FcmTokenTable }
+        single { IotConnectTable }
     }
 }

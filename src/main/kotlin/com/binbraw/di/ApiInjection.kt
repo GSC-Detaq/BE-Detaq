@@ -5,6 +5,7 @@ import com.binbraw.data.api.family.PatientWithFamilyApi
 import com.binbraw.data.api.fcm.FcmApi
 import com.binbraw.data.api.user.UserApi
 import com.binbraw.data.api.general.role.RoleApi
+import com.binbraw.data.api.iot.IotApi
 import com.binbraw.data.api.reminder.DoctorReminderApi
 import com.binbraw.data.api.reminder.MedicineReminderApi
 import org.koin.dsl.module
@@ -18,5 +19,6 @@ object ApiInjection {
         single { DoctorReminderApi }
         single { PatientWithFamilyApi }
         single { FcmApi }
+        single { IotApi }
     }
 }
