@@ -12,5 +12,7 @@ data class SingleNotificationResponse(
     val timestamp:String,
     val clicked:Boolean,
     val uid:String,
-    val notif_type:String
+    val notif_type:String,
+    val lat:String,
+    val long:String
 )
