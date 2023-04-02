@@ -1,5 +1,6 @@
 package com.binbraw.data.api.notification
 
+import com.binbraw.data.table.family.PatientWithFamilyTable
 import com.binbraw.data.table.notification.NotificationTable
 import com.binbraw.data.table.notification.NotificationTypeTable
 import com.binbraw.model.base.MetaResponse
@@ -26,6 +27,8 @@ import java.util.*
 object NotificationApi : KoinComponent {
     val notifTable by inject<NotificationTable>()
     val notifTypeTable by inject<NotificationTypeTable>()
+    val patientFamilyTable by inject<PatientWithFamilyTable>()
+
     fun Route.addNewMedicineReminderNotification(path: String) {
         post(path) {
             val body = call.receive<AddNewReminderRequest>()
@@ -80,25 +83,49 @@ object NotificationApi : KoinComponent {
         post(path) {
             val body = call.receive<AddNewSosRequest>()
             val uid = call.principal<JWTPrincipal>()!!.payload.getClaim("uid").asString()
-            val randomizedNotifId = UUID.randomUUID()
 
-            transaction {
-                notifTable.insert {
-                    it[notifTable.notification_id] = randomizedNotifId
-                    it[notifTable.title] = body.title
-                    it[notifTable.body] = body.body
-                    it[notifTable.additional_link] = body.additional_link
-                    it[notifTable.timestamp] = body.timestamp
-                    it[notifTable.uid] = uid
-                    it[notifTable.notif_type_id] = 3
+            val familyIds = transaction {
+                patientFamilyTable.select {
+                    patientFamilyTable.patient_id eq UUID.fromString(uid)
+                }.mapNotNull {
+                    it[patientFamilyTable.family_id]
                 }
-            }.let {
-                sendGeneralResponse<Any>(
-                    success = true,
-                    message = "Add SOS notification success",
-                    code = HttpStatusCode.OK
-                )
             }
+
+            familyIds.map { id ->
+                val randomizedNotifId = UUID.randomUUID()
+                transaction {
+                    notifTable.insert {
+                        it[notifTable.notification_id] = randomizedNotifId
+                        it[notifTable.title] = body.title
+                        it[notifTable.body] = body.body
+                        it[notifTable.additional_link] = body.additional_link
+                        it[notifTable.timestamp] = body.timestamp
+                        it[notifTable.uid] = uid
+                        it[notifTable.lat] = body.lat
+                        it[notifTable.long] = body.long
+                        it[notifTable.notif_type_id] = 3
+                    }
+                }
+            }
+//            val randomizedNotifId = UUID.randomUUID()
+//            transaction {
+//                notifTable.insert {
+//                    it[notifTable.notification_id] = randomizedNotifId
+//                    it[notifTable.title] = body.title
+//                    it[notifTable.body] = body.body
+//                    it[notifTable.additional_link] = body.additional_link
+//                    it[notifTable.timestamp] = body.timestamp
+//                    it[notifTable.uid] = uid
+//                    it[notifTable.notif_type_id] = 3
+//                }
+//            }.let {
+//                sendGeneralResponse<Any>(
+//                    success = true,
+//                    message = "Add SOS notification success",
+//                    code = HttpStatusCode.OK
+//                )
+//            }
         }
     }
 
@@ -133,7 +160,9 @@ object NotificationApi : KoinComponent {
                                 else -> false
                             },
                             uid = it[notifTable.uid],
-                            notif_type = notifTypes[it[notifTable.notif_type_id]] ?: "Unknown type"
+                            notif_type = notifTypes[it[notifTable.notif_type_id]] ?: "Unknown type",
+                            lat = it[notifTable.lat],
+                            long = it[notifTable.long]
                         )
                     }
             }

@@ -12,5 +12,7 @@ object NotificationTable:Table("notification") {
     val visible = integer("visible")
     val clicked = integer("clicked")
     val uid = varchar("uid", 128)
+    val lat = varchar("lat", 64)
+    val long = varchar("long", 64)
     val no = integer("no")
 }
