@@ -14,6 +14,5 @@ data class GetAllFamilyResponse(
 data class GetAllFamilyResponseData(
     val uid:String,
     val email:String,
-    val name:String,
-    val role_name:String
+    val name:String
 )

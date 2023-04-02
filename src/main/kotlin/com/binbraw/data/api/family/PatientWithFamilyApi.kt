@@ -127,8 +127,7 @@ object PatientWithFamilyApi : KoinComponent {
                         GetAllFamilyResponseData(
                             uid = it[userTable.uid].toString(),
                             name = it[userTable.name],
-                            email = it[userTable.email],
-                            role_name = roleNames[it[userTable.role_id]] ?: "Others"
+                            email = it[userTable.email]
                         )
                     }
                 }
@@ -171,8 +170,7 @@ object PatientWithFamilyApi : KoinComponent {
                         GetAllFamilyResponseData(
                             uid = it[userTable.uid].toString(),
                             name = it[userTable.name],
-                            email = it[userTable.email],
-                            role_name = roleNames[it[userTable.role_id]] ?: "Others"
+                            email = it[userTable.email]
                         )
                     }
                 }
