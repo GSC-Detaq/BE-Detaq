@@ -12,5 +12,12 @@ data class SendPushNotificationRequestAsClient(
 data class SendPushNotificationRequestAsClientData(
     val body:String,
     val title:String,
-    val link:String
+    val link:String,
+    val data: SendPushNotificationData?
+)
+
+@Serializable
+data class SendPushNotificationData(
+    val lat:String,
+    val long:String
 )

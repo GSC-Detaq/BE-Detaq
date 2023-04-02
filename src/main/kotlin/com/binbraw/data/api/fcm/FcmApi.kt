@@ -3,10 +3,7 @@ package com.binbraw.data.api.fcm
 import com.binbraw.data.table.family.PatientWithFamilyTable
 import com.binbraw.data.table.fcm.FcmTokenTable
 import com.binbraw.data.table.user.UserTable
-import com.binbraw.model.request.fcm.SendPushNotificationRequest
-import com.binbraw.model.request.fcm.SendPushNotificationRequestAsClient
-import com.binbraw.model.request.fcm.SendPushNotificationRequestAsClientData
-import com.binbraw.model.request.fcm.UpdateFcmTokenRequest
+import com.binbraw.model.request.fcm.*
 import com.binbraw.util.Config
 import com.binbraw.wrapper.sendGeneralResponse
 import io.ktor.client.*
@@ -113,7 +110,11 @@ object FcmApi : KoinComponent {
                             notification = SendPushNotificationRequestAsClientData(
                                 body = "Something happens to $patientName, please check or click this notification to be redirected to Google Maps",
                                 title = "SOS Notification from your family",
-                                link = formatLink
+                                link = formatLink,
+                                data = SendPushNotificationData(
+                                    lat = receivedBody.latitude,
+                                    long = receivedBody.longitude
+                                )
                             )
                         )
                     )
@@ -180,7 +181,8 @@ object FcmApi : KoinComponent {
                             notification = SendPushNotificationRequestAsClientData(
                                 body = "Something happens to $patientName, please check or click this notification to be redirected to Google Maps",
                                 title = "SOS Notification from your family",
-                                link = ""
+                                link = "",
+                                data = null
                             )
                         )
                     )

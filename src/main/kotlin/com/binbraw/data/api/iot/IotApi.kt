@@ -17,8 +17,6 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.routing.header
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -161,7 +159,8 @@ object IotApi : KoinComponent {
                             notification = SendPushNotificationRequestAsClientData(
                                 body = "Congratulation, your device has been connected successfully",
                                 title = "Device has been connected",
-                                link = ""
+                                link = "",
+                                data = null
                             )
                         )
                     )

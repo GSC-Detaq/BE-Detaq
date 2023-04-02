@@ -107,6 +107,12 @@ object NotificationApi : KoinComponent {
                         it[notifTable.notif_type_id] = 3
                     }
                 }
+            }.let {
+                sendGeneralResponse<Any>(
+                    success = true,
+                    message = "Add SOS notification success",
+                    code = HttpStatusCode.OK
+                )
             }
 //            val randomizedNotifId = UUID.randomUUID()
 //            transaction {
@@ -181,8 +187,8 @@ object NotificationApi : KoinComponent {
         }
     }
 
-    fun Route.setClickedStatusToTwo(path:String){
-        get(path){
+    fun Route.setClickedStatusToTwo(path: String) {
+        get(path) {
             val uid = call.principal<JWTPrincipal>()!!.payload.getClaim("uid").asString()
             val notifId = call.parameters["notification_id"] ?: ""
 
@@ -204,8 +210,8 @@ object NotificationApi : KoinComponent {
         }
     }
 
-    fun Route.getActiveNotificationCount(path:String){
-        get(path){
+    fun Route.getActiveNotificationCount(path: String) {
+        get(path) {
             val uid = call.principal<JWTPrincipal>()!!.payload.getClaim("uid").asString()
 
             val count = transaction {
