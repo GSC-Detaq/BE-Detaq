@@ -92,9 +92,9 @@ object NotificationApi : KoinComponent {
                 }
             }
 
-            familyIds.map { id ->
-                val randomizedNotifId = UUID.randomUUID()
-                transaction {
+            transaction {
+                familyIds.forEach { id ->
+                    val randomizedNotifId = UUID.randomUUID()
                     notifTable.insert {
                         it[notifTable.notification_id] = randomizedNotifId
                         it[notifTable.title] = body.title
