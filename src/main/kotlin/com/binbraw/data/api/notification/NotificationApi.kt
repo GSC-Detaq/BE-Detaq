@@ -99,7 +99,7 @@ object NotificationApi : KoinComponent {
                         it[notifTable.notification_id] = randomizedNotifId
                         it[notifTable.title] = body.title
                         it[notifTable.body] = body.body
-                        it[notifTable.additional_link] = "val formatLink = \"https://www.google.com/maps/search/${body.lat},${body.long}\""
+                        it[notifTable.additional_link] = "https://www.google.com/maps/search/${body.lat},${body.long}"
                         it[notifTable.timestamp] = body.timestamp
                         it[notifTable.uid] = uid
                         it[notifTable.lat] = body.lat
