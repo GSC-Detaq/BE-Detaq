@@ -131,7 +131,7 @@ object FcmApi : KoinComponent {
                                     it[NotificationApi.notifTable.body] = "Something happens to $patientName, please check or call"
                                     it[NotificationApi.notifTable.additional_link] = "https://www.google.com/maps/search/${receivedBody.latitude},${receivedBody.longitude}"
                                     it[NotificationApi.notifTable.timestamp] = receivedBody.timestamp
-                                    it[NotificationApi.notifTable.uid] = uid
+                                    it[NotificationApi.notifTable.uid] = id
                                     it[NotificationApi.notifTable.lat] = receivedBody.latitude
                                     it[NotificationApi.notifTable.long] = receivedBody.longitude
                                     it[NotificationApi.notifTable.notif_type_id] = 3
