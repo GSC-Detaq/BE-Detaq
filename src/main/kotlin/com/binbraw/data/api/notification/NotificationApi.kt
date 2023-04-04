@@ -139,7 +139,7 @@ object NotificationApi : KoinComponent {
         get(path) {
             val uid = call.principal<JWTPrincipal>()!!.payload.getClaim("uid").asString()
             val page = call.parameters["page"]?.toIntOrNull() ?: 1
-            val perPage = 5
+            val perPage = 15
             val offset = (page - 1) * perPage
 
             val notifTypes = transaction {
